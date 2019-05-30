@@ -5,36 +5,13 @@ https://github.com/pypa/sampleproject
 """
 
 # Always prefer setuptools over distutils
-from setuptools import setup, find_packages
-
-try:
-    from sphinx.setup_command import BuildDoc
-except ImportError as e:
-    BuildDoc = None
-
-# To use a consistent encoding
-from codecs import open
-from os import path
-here = path.abspath(path.dirname(__file__))
-
-# Get the long description from the relevant file
-with open(path.join(here, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
-
-# with open(path.join(here, 'requirements.txt'), encoding='utf-8') as f:
-#     requirements = f.read()
-
-with open(path.join(here, 'VERSION.cfg'), encoding='utf-8') as f:
-    version = f.read().strip().lower()
-
 from distutils.core import setup
 setup(
   name = 'volosAPI',
   packages = ['volosAPI'],
-  version = version,
+  version = "1.4",
   license='MIT',
   description =  'Volos Portfolio Solutions LLC, Data API Python Integrator',
-  long_description = long_description,
   author='Volos Portfolio Solutions',
   author_email='info@volossoftware.com',
 
