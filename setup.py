@@ -15,7 +15,6 @@ except ImportError as e:
 # To use a consistent encoding
 from codecs import open
 from os import path
-from package import Package
 here = path.abspath(path.dirname(__file__))
 
 
@@ -28,7 +27,6 @@ def discover_and_run_tests():
     setup_file = sys.modules['__main__'].__file__
     setup_dir = os.path.abspath(os.path.dirname(setup_file))+"/tests/unittests"
 
-    print setup_dir
     # use the default shared TestLoader instance
     test_loader = unittest.defaultTestLoader
 
@@ -38,8 +36,6 @@ def discover_and_run_tests():
     # automatically discover all tests
     # NOTE: only works for python 2.7 and later
     test_suite = test_loader.discover(setup_dir, pattern='unittest*.py')
-
-    print test_suite
 
     # run the test suite
     test_runner.run(test_suite)
@@ -93,7 +89,7 @@ setup(
   author='Volos Portfolio Solutions',
   author_email='info@volossoftware.com',
 
-  url = 'https://github.com/user/reponame',   # Provide either the link to your github or to your website
+  url = 'https://github.com/saif-sultan/volosAPI',
   download_url = 'https://github.com/user/reponame/archive/v_01.tar.gz',    # I explain this later on
   keywords = ['Volos', 'Data API', 'FinTech'],
   install_requires=requirements,
