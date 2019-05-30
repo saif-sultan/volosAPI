@@ -21,8 +21,8 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
-with open(path.join(here, 'requirements.txt'), encoding='utf-8') as f:
-    requirements = f.read()
+# with open(path.join(here, 'requirements.txt'), encoding='utf-8') as f:
+#     requirements = f.read()
 
 with open(path.join(here, 'VERSION.cfg'), encoding='utf-8') as f:
     version = f.read().strip().lower()
@@ -39,9 +39,9 @@ setup(
   author_email='info@volossoftware.com',
 
   url = 'https://github.com/saif-sultan/volosAPI',
-  download_url = 'https://github.com/user/reponame/archive/v_01.tar.gz',    # I explain this later on
+  download_url = 'https://github.com/saif-sultan/volosAPI/archive/v_101.tar.gz',
   keywords = ['Volos', 'Data API', 'FinTech'],
-  install_requires=requirements,
+  install_requires=["pandas", "requests"],
   classifiers=[
     'Development Status :: 3 - Alpha',
     'Intended Audience :: Developers',
