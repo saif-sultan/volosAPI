@@ -56,9 +56,11 @@ class volosAPI(object):
             raise Exception("Please set API Key")
         return {'x-api-key': self.API_KEY}
 
-    def get_url(self, uri):
-        return self.API_ENDPOINT + self.API_STAGE + uri
-
+    def get_url(self, uri, api_stage = None):
+        if api_stage is None:
+            return self.API_ENDPOINT + self.API_STAGE + uri
+        else:
+            return self.API_ENDPOINT + api_stage + uri
     def get_strategy_total_returns(self, strategy_id, output_format='csv', start_date='1990-01-01', end_date='2050-01-01'):
         uri = '/time-series/totalreturns'
         payload = {'strategy_id': strategy_id, 'output_format': output_format, 'start_date':start_date, 'end_date':end_date}
@@ -90,6 +92,12 @@ class volosAPI(object):
         uri = '/strategy/tradelogs'
         payload = {'strategy_id': strategy_id, 'start_date': start_date, 'end_date': end_date}
         res = requests.post(self.get_url(uri), data=json.dumps(payload), headers=self.get_headers())
+        return pd.read_csv(io.StringIO(res.content.decode('utf-8')))
+
+    def get_strategy_positions(self, strategy_id, on_date, api_stage = None):
+        uri = '/strategy/positions'
+        payload = {'strategy_id': strategy_id, 'on_date':on_date}
+        res = requests.post(self.get_url(uri, api_stage=api_stage), data=json.dumps(payload), headers=self.get_headers())
         return pd.read_csv(io.StringIO(res.content.decode('utf-8')))
 
 

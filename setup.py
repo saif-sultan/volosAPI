@@ -9,7 +9,7 @@ from distutils.core import setup
 setup(
   name = 'volosAPI',
   packages = ['volosAPI'],
-  version = "1.4",
+  version = "1.5",
   license='MIT',
   description =  'Volos Portfolio Solutions LLC, Data API Python Integrator',
   author='Volos Portfolio Solutions',
