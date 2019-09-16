@@ -1,3 +1,4 @@
 pandas==0.23.4
 pandas-datareader==0.7.0
 requests==2.19.1
+xlsxwriter==0.6.7

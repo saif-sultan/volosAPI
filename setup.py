@@ -9,14 +9,14 @@ from distutils.core import setup
 setup(
   name = 'volosAPI',
   packages = ['volosAPI'],
-  version = "1.5",
+  version = "1.6",
   license='MIT',
   description =  'Volos Portfolio Solutions LLC, Data API Python Integrator',
   author='Volos Portfolio Solutions',
   author_email='info@volossoftware.com',
 
   url = 'https://github.com/saif-sultan/volosAPI',
-  download_url = 'https://github.com/saif-sultan/volosAPI/archive/v_15.tar.gz',
+  download_url = 'https://github.com/saif-sultan/volosAPI/archive/v_16.tar.gz',
   keywords = ['Volos', 'Data API', 'FinTech'],
   install_requires=["pandas", "requests"],
   classifiers=[

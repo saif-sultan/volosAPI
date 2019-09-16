@@ -28,7 +28,8 @@ import json
 import requests
 import pandas as pd
 import io
-
+import os
+import datetime
 
 class volosAPI(object):
 
@@ -61,6 +62,7 @@ class volosAPI(object):
             return self.API_ENDPOINT + self.API_STAGE + uri
         else:
             return self.API_ENDPOINT + api_stage + uri
+
     def get_strategy_total_returns(self, strategy_id, output_format='csv', start_date='1990-01-01', end_date='2050-01-01'):
         uri = '/time-series/totalreturns'
         payload = {'strategy_id': strategy_id, 'output_format': output_format, 'start_date':start_date, 'end_date':end_date}
@@ -138,7 +140,6 @@ class volosAPI(object):
 
     def get_all_tags(self):
         uri = '/misc/all-tags'
-
         res = requests.get(self.get_url(uri), headers=self.get_headers())
         return json.loads(res.content)
 
@@ -148,3 +149,48 @@ class volosAPI(object):
         payload = {'tag_name_list': tag_name_list}
         res = requests.post(self.get_url(uri), data=json.dumps(payload), headers=self.get_headers())
         return pd.read_csv(io.StringIO(res.content.decode('utf-8')))
+
+
+    def get_timeseries_positions(self, strategy_id, start_date='1990-01-01', end_date='2050-01-01', api_stage=None):
+        uri = '/time-series/positions'
+        payload = {'strategy_id': strategy_id, 'start_date':start_date, 'end_date':end_date}
+        res = requests.post(self.get_url(uri, api_stage=api_stage), data=json.dumps(payload), headers=self.get_headers())
+        return pd.read_csv(io.StringIO(res.content.decode('utf-8')))
+
+
+    def get_timeseries_positions_values(self, strategy_id, start_date='1990-01-01', end_date='2050-01-01', api_stage=None):
+        uri = '/time-series/positions-values'
+        payload = {'strategy_id': strategy_id, 'start_date': start_date, 'end_date': end_date}
+        res = requests.post(self.get_url(uri, api_stage=api_stage), data=json.dumps(payload), headers=self.get_headers())
+        return pd.read_csv(io.StringIO(res.content.decode('utf-8')))
+
+
+    def get_strategy_positions_meta_data(self, strategy_id, api_stage=None):
+        uri = '/strategy/positions/meta-data'
+        payload = {'strategy_id': strategy_id}
+        res = requests.post(self.get_url(uri, api_stage=api_stage), data=json.dumps(payload), headers=self.get_headers())
+        return pd.read_csv(io.StringIO(res.content.decode('utf-8')))
+
+
+    def save_positions_to_excel(self, strategy_id, path = '.', api_stage =None):
+
+        df_positions = self.get_timeseries_positions(strategy_id=strategy_id, api_stage=api_stage).pivot(index='date', columns='security_id', values='shares')
+        df_values = self.get_timeseries_positions_values(strategy_id=strategy_id, api_stage=api_stage).pivot(index='date', columns='security_id', values='value')
+        df_meta = self.get_strategy_positions_meta_data(strategy_id=strategy_id, api_stage=api_stage)
+
+        sheet_name_list = ['holdings', 'values', 'meta_data']
+        df_list = [df_positions, df_values, df_meta]
+
+        timestamp = datetime.datetime.utcnow().strftime('%Y%m%d-%H%M%S-%f')
+        fname = os.path.join(path, '{}-{}.xlsx'.format(strategy_id, timestamp))
+        writer = pd.ExcelWriter(fname, engine='xlsxwriter')
+
+        for sheet_name, df in zip(sheet_name_list, df_list):
+            df.to_excel(writer, sheet_name=sheet_name)
+        writer.save()
+        print("saved to excel: {}".format(fname))
+
+if __name__ == '__main__':
+    strategy_id = '00103d6f-43d1-e1bf-2b0b-064847220728'
+    vs = volosAPI(api_key="g9gLdSXz2F2G6klCHmoOM6whZmB0PHJraeFSu2Yj")
+    vs.save_positions_to_excel(strategy_id, api_stage='ci')
